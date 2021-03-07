@@ -69,5 +69,54 @@ echo -e "\tTar file successfully created on /tmp location"
 echo -e "\n\n6. Copying tar archive file to S3 bucket"
 aws s3 cp /tmp/$myname-httpd-logs-$timestamp.tar s3://$s3_bucket/$myname-httpd-logs-$timestamp.tar
 echo -e "\tCopy to S3 bucket: SUCESS"
-echo -e "\n\n\n\t\t\t******All Functions performed Successfully, Thank you!!******"
 
+
+#Checking Inventory file and updating logs
+logfile=`ls -ltr /tmp/*.tar | grep -i $timestamp | awk -F '/' '{print $3 }' | awk -F '-' '{print $2 "-" $3 }'`
+fext=`ls -ltr /tmp | grep -i $timestamp | awk -F '.' '{print $2 }'`
+fsize=`ls -ltrh /tmp/*.tar | grep -i $timestamp | awk '{ print $5 }'`
+echo -e "\n\n7. Checking Inventory.html file and updating logs"
+ls -ltr /var/www/html/inventory.html &> /dev/null
+tmp=`echo $?`
+
+if [ "$tmp" = "0" ]
+then
+        echo -e "\tInventory file already exists....check passed"
+        echo -e "\tAdding logs to inventory.html file...."
+	printf "$logfile\t\t$timestamp\t\t$fext\t\t$fsize\n" >> /var/www/html/inventory.html
+	echo -e "\tLog added successfully!!!"
+else
+        echo -e "\tInventory.html doesnot Exist!!! Creating inventory file now...."
+        printf "Log Type\t\tTime Created\t\tType\t\tSize\n" >> /var/www/html/inventory.html
+        echo -e "\tInventory.html file created and header added"
+	echo -e "\tAdding logs to inventory.html file...."
+        printf "$logfile\t\t$timestamp\t\t$fext\t\t$fsize\n" >> /var/www/html/inventory.html
+	echo -e "\tLog added successfully!!"
+fi
+
+
+#Checking if cron file exists, add entry if doesnt
+echo -e "\n\n8. Creating cron file and adding the cron job"
+ls -ltr /etc/cron.d/automation &> /dev/null
+tmp1=`echo $?`
+
+if [ "$tmp1" = "0" ]
+then
+	echo -e "\tCron file exists"
+	jobprsnt=`cat /etc/cron.d/automation | awk -F '/' '{print $4 }'`
+	tmp2=`echo $?`
+	if [ "$jobprsnt" = "automation.sh" ]
+	then
+		echo -e "\tJob is already scheduled"
+	else
+		echo -e "\tAdding job in file at it was not added already"
+		echo -e "3 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+	fi
+else
+	echo -e "\tCron file doesnot exist!! Creating cron file now"
+	touch /etc/cron.d/automation
+	echo -e "\tAdding job in cron file"
+	echo -e "3 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+fi
+
+echo -e "\n\n\n\t\t\t******All Functions performed Successfully, Thank you!!******"

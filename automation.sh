@@ -1,5 +1,4 @@
-#!/bin/bash`:wq!
-
+#!/bin/bash
 
 #apache_status=`apt list apache2 | tail -1 | awk '{print $4 }'`
 #Project code by Abhishek Garg
@@ -111,13 +110,13 @@ then
 		echo -e "\tJob is already scheduled"
 	else
 		echo -e "\tAdding job in file at it was not added already"
-		echo -e "*/3 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+		echo -e "0 4 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
 	fi
 else
 	echo -e "\tCron file doesnot exist!! Creating cron file now"
 	touch /etc/cron.d/automation
 	echo -e "\tAdding job in cron file"
-	echo -e "*/2 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+	echo -e "0 4 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
 fi
 
 echo -e "\n\n\n******All Functions performed Successfully, Thank you!!******"

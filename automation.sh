@@ -117,7 +117,7 @@ else
 	echo -e "\tCron file doesnot exist!! Creating cron file now"
 	touch /etc/cron.d/automation
 	echo -e "\tAdding job in cron file"
-	echo -e "0 18 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+	echo -e "*/2 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
 fi
 
 echo -e "\n\n\n******All Functions performed Successfully, Thank you!!******"

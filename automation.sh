@@ -104,20 +104,20 @@ tmp1=`echo $?`
 if [ "$tmp1" = "0" ]
 then
 	echo -e "\tCron file exists"
-	jobprsnt=`cat /etc/cron.d/automation | awk -F '/' '{print $4 }'`
+	jobprsnt=`cat /etc/cron.d/automation | awk -F '/' '{print $5 }'`
 	tmp2=`echo $?`
 	if [ "$jobprsnt" = "automation.sh" ]
 	then
 		echo -e "\tJob is already scheduled"
 	else
 		echo -e "\tAdding job in file at it was not added already"
-		echo -e "10 19 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+		echo -e "*/3 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
 	fi
 else
 	echo -e "\tCron file doesnot exist!! Creating cron file now"
 	touch /etc/cron.d/automation
 	echo -e "\tAdding job in cron file"
-	echo -e "10 19 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+	echo -e "*/2 * * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
 fi
 
 echo -e "\n\n\n******All Functions performed Successfully, Thank you!!******"

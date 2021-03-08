@@ -1,6 +1,5 @@
 #!/bin/bash
 
-#apache_status=`apt list apache2 | tail -1 | awk '{print $4 }'`
 #Project code by Abhishek Garg
 #Declaring variables
 
@@ -103,20 +102,22 @@ tmp1=`echo $?`
 if [ "$tmp1" = "0" ]
 then
 	echo -e "\tCron file exists"
-	jobprsnt=`cat /etc/cron.d/automation | awk -F '/' '{print $5 }'`
+	jobprsnt=`cat /etc/cron.d/automation | grep -i automation | awk '{print $7 }' | awk -F '/' '{print $4}'`
 	tmp2=`echo $?`
 	if [ "$jobprsnt" = "automation.sh" ]
 	then
 		echo -e "\tJob is already scheduled"
 	else
 		echo -e "\tAdding job in file at it was not added already"
-		echo -e "0 4 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+		echo -e "0 1 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+		echo -e "\tCron entry is added successfully !!!"
 	fi
 else
 	echo -e "\tCron file doesnot exist!! Creating cron file now"
 	touch /etc/cron.d/automation
 	echo -e "\tAdding job in cron file"
-	echo -e "0 4 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+	echo -e "0 1 * * * root /root/Automation_Project/automation.sh" >> /etc/cron.d/automation
+	echo -e "\tCron entry is added successfully!!!"
 fi
 
 echo -e "\n\n\n******All Functions performed Successfully, Thank you!!******"

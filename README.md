@@ -35,7 +35,7 @@ The Automation script performs the following funtions
     systemctl enable apache2
     
 5. Tar the .log files to /tmp folder
-6. Copy the tar file to s3 bucket "upgrad-ahishek"
+6. Copy the tar file to s3 bucket "upgrad-abhishek"
 7. Add the tar log in the inventory.htmls
     Check if inventory.html is present and append log, if not
     create inventory.hetml and append data.
